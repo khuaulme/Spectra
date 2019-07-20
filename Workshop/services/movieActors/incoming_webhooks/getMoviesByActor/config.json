@@ -1,0 +1,11 @@
+{
+    "id": "5d327d44bb56a128fd03aa12",
+    "name": "getMoviesByActor",
+    "run_as_user_id": "",
+    "run_as_user_id_script_source": "",
+    "options": {
+        "httpMethod": "GET",
+        "validationMethod": "NO_VALIDATION"
+    },
+    "respond_result": true
+}

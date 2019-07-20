@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Spectra Movies</title>
+    <!-- Let's use Bootstrap improve the default look a bit -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"
+    />
+  </head>
+  <style>
+    div {
+      margin-left: 40px;
+    }
+  </style>
+  <body>
+    <div>
+      <h2>Movie Finder</h2>
+      <p style="font-size: 1.8em;">
+        This simple page demonstrates how MongoDB Stitch can <a href="https://docs.mongodb.com/stitch/hosting/" target="_blank">host</a> your application
+        front-end.
+      </p>
+
+      <form action="javascript:" onsubmit="userAction()" autocomplete="off" style="font-size: 1.8em;"><b>Movie name:</b>
+        <input type="text" id="title" placeholder="Search the database..." style="width: 600px">
+    </form>
+
+      <p id="results" style="font-size: 1.8em;"></p>
+
+    </div>
+
+    <script>
+      const userAction = async () => {
+        var txt = "";
+
+        var searchString = document.getElementById("title").value;
+
+        // Replace w/ your webhook URL
+        webhook_url =
+	  "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/workshop-vxkrn/service/movies/incoming_webhook/getMovieByTitle";
+        url = webhook_url + "?arg=" + searchString;
+        console.log(url);
+
+        const response = await fetch(url);
+        const myJson = await response.json(); //extract JSON from the http response
+        console.log(myJson);
+
+        let i = 0;
+        
+        if (myJson.title != undefined) {
+          // We found a movie
+          txt += "<br>" + myJson.title + "<br>";
+          txt += myJson.year["$numberInt"] + "<br>";
+          txt += "Cast: ";
+          for (i = 0; i < myJson.cast.length - 1; i++){
+              txt += myJson.cast[i] + ", ";
+          }
+          txt += "and " + myJson.cast[i] + "<br><br>";
+          txt += myJson.plot+ "<br>";
+          
+        } else {
+          txt = "No information available for movie " + searchString;
+        }
+
+        document.getElementById("results").innerHTML = txt;
+      };
+    </script>
+  </body>
+</html>
